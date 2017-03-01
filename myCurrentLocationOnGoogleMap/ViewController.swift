@@ -7,18 +7,62 @@
 //
 
 import UIKit
+import GoogleMaps
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,CLLocationManagerDelegate {
+    
+    
+    //Outlets
+    @IBOutlet var MapView: GMSMapView!
+    
+    //Variables
+    var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        initializeTheLocationManager()
+        self.MapView.isMyLocationEnabled = true
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func initializeTheLocationManager()
+    {
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
     }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        var location = locationManager.location?.coordinate
+        
+        cameraMoveToLocation(toLocation: location)
+        
+    }
+    
+    
+    
+    func cameraMoveToLocation(toLocation: CLLocationCoordinate2D?) {
+        if toLocation != nil {
+            MapView.camera = GMSCameraPosition.camera(withTarget: toLocation!, zoom: 15)
+            
+            
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 }
